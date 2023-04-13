@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = 'secret'
 @app.route('/')
 def hello():
     # return '<h1>testing</h1>'
-    return render_template('index.html')
+    return render_template('Home.html')
 
 @app.route('/AccountInfo')
 def displayInfo():
