@@ -33,8 +33,9 @@ def displayInfo():
     
 @app.route('/ChangeInfo', methods=['GET','POST'])
 def ChangeInfo():
-    value = request.form.get('Options')
-    text = request.form['info']
+    if classmethod == 'POST':
+        value = request.form('Options')
+        text = request.form['info']
     return render_template('changeInfo.html')
     
 @app.route('/register', methods=['GET','POST'])
