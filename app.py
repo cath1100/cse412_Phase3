@@ -24,8 +24,17 @@ app.config
 @app.route('/')
 def hello():
     # return '<h1>testing</h1>'
-    return render_template('index.html')
+    return render_template('Home.html')
 
+
+@app.route('/AccountInfo')
+def displayInfo():
+    return render_template('account.html')
+    
+@app.route('/ChangeInfo')
+def ChangeInfo():
+    return render_template('changeInfo.html')
+    
 @app.route('/register', methods=['GET','POST'])
 def register():
 
