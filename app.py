@@ -29,10 +29,12 @@ def hello():
 
 @app.route('/AccountInfo')
 def displayInfo():
-    return render_template('account.html')
+    return render_template('account.html',userid='userid',firstname='firstname',lastname='lastname',email='email',dateofbirth='dateofbirth',hometown='hometown',gender='gender')
     
-@app.route('/ChangeInfo')
+@app.route('/ChangeInfo', methods=['GET','POST'])
 def ChangeInfo():
+    value = request.form.get('Options')
+    text = request.form['info']
     return render_template('changeInfo.html')
     
 @app.route('/register', methods=['GET','POST'])

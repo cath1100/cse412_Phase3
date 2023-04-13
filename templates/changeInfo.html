@@ -36,16 +36,18 @@
           </nav>
         <h2>Change Account Info</h2>
         <label for="Options">Choose a field you would want to change:</label>
-        <select name="Options" id="Options">
-            <option value="First Name">First Name</option>
-            <option value="Last Name">Last Name</option>
-            <option value="Date of Birth">Date of Birth</option>
-            <option value="Hometown">Hometown</option>
-            <option value="Gender">Gender</option>
-        </select>
-        <p></p>
-        <input type="text" id="info" name="info"><br><br>
-        <input type="submit" value="Submit">
+        <form action="{{url_for('ChangeInfo')}}" method='post'>
+          <select name="Options" id="Options">
+              <option value="First Name">First Name</option>
+              <option value="Last Name">Last Name</option>
+              <option value="Date of Birth">Date of Birth</option>
+              <option value="Hometown">Hometown</option>
+              <option value="Gender">Gender</option>
+          </select>
+          <p></p>
+          <input type="text" id="info" name="info"><br><br>
+          <input type="submit" value="Submit">
+        </form>
         <div class="container">{% block content %} {% endblock %}</div>
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

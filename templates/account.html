@@ -35,13 +35,13 @@
             </div>
           </nav>
         <h2>Account Info</h2>
-        <p>UserID:</p>
-        <p>First Name: </p>
-        <p>Last Name: </p>
-        <p>Email: </p>
-        <p>Date of Birth: </p>
-        <p>Hometown: </p>
-        <p>Gender: </p>
+        <p>UserID: {{userid}}</p>
+        <p>First Name: {{firstname}} </p>
+        <p>Last Name: {{lastname}} </p>
+        <p>Email: {{email}}</p>
+        <p>Date of Birth: {{dateofbirth}}</p>
+        <p>Hometown: {{hometown}}</p>
+        <p>Gender: {{gender}}</p>
         <button onclick="window.location.href = '/ChangeInfo';">CHANGE INFO</button>
         <div class="container">{% block content %} {% endblock %}</div>
     <script
