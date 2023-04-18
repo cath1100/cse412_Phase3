@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 import mysql.connector
 from mysql.connector import Error
 
@@ -20,7 +20,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 app.config
 
-
 @app.route('/')
 def hello():
     # return '<h1>testing</h1>'
@@ -36,8 +35,9 @@ def displayInfo():
     
 @app.route('/ChangeInfo', methods=['GET','POST'])
 def ChangeInfo():
-    if request.method == 'POST':
-        value = request.form('Options')
+
+    if classmethod == 'POST':
+        value = request.form['Options']
         text = request.form['info']
     return render_template('changeInfo.html')
     
@@ -65,8 +65,27 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/Search', methods=['GET','POST'])
+def Search():
+    if request.method == 'POST':
+        userSearch = request.form['searchuser']
+        photoSearch= request.form['searchphoto']
 
+        return redirect(url_for('searchUser'))
+    
+    return render_template('Search.html')
 
+@app.route('/SearchUser')
+def searchUser():
+    return render_template('SearchUser.html', value="useremail@example.com")
+
+@app.route('/SearchPhoto')
+def searchPhoto():
+    return render_template('SearchPhotos.html')
+
+@app.route('/TopUsers')
+def listUsers():
+    return render_template('topUsers.html', user1 ="user1", user2 = "user2", user3="user3", user4="user4", user5 ="user5")
 
 
 if __name__ == '__main__':
