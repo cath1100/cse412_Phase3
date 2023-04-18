@@ -24,7 +24,10 @@ app.config
 @app.route('/')
 def hello():
     # return '<h1>testing</h1>'
-    return render_template('Home.html')
+    friendslist = ["betty","chris","paul","josh"]
+    friendrecommendationlist = ["ryan","spencer","mia","alex"]
+
+    return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist)
 
 
 @app.route('/AccountInfo')
@@ -33,14 +36,15 @@ def displayInfo():
     
 @app.route('/ChangeInfo', methods=['GET','POST'])
 def ChangeInfo():
-    value = request.form.get('Options')
-    text = request.form['info']
+    if request.method == 'POST':
+        value = request.form('Options')
+        text = request.form['info']
     return render_template('changeInfo.html')
     
 @app.route('/register', methods=['GET','POST'])
 def register():
 
-    if classmethod == 'POST':
+    if request.method == 'POST':
         firstname = request.form['registerFirstName']
         lastname = request.form['registerLastName']
         email = request.form['registeremail']
@@ -54,8 +58,7 @@ def register():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-
-    if classmethod == 'POST':
+    if request.method == 'POST':
         email = request.form['loginemail']
         password = request.form['loginpassword']
 

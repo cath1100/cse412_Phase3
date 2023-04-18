@@ -1,0 +1,14 @@
+{% macro friendrecommendations(recommendationlist) %}
+    <div  style="background-color: #9C1A1C">
+        <div type="button"  id="friendrec-detail">
+        <h5>Friend Recommendations</h5>
+           <div class="list-group">
+               {% for friend in recommendationlist %}
+                <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                    {{ friend }}
+                </a>
+               {% endfor %}
+           </div>
+        </div>
+    </div>
+{% endmacro %}
