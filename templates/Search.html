@@ -40,8 +40,21 @@
               </div>
             </div>
           </nav>
-    <!-- Content -->
-     
+    
+    <!-- Content  -->
+      <form method= "POST" action="/Search">
+        <div class="form-group">
+          <label for="title">Search User</label>
+          <input type="text" class="form-control" name="searchuser" id="searchuser">
+        </div>
+        <button type="submit" class="btn btn-primary"> Submit </button>
+        <div class="form-group">
+          <label for="title">Search Photo</label>
+          <input type="text" class="form-control" name="searchphoto" id="searchphoto">
+        </div>
+        <button type="submit" class="btn btn-primary"> Submit </button>
+      </form>
+
       <div class="container">{% block content %} {% endblock %}</div>
         <script
           src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
