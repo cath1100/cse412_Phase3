@@ -65,16 +65,21 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/Search', methods=['GET','POST'])
-def Search():
+@app.route('/UserSearch', methods=['GET','POST'])
+def UserSearch():
     if request.method == 'POST':
         userSearch = request.form['searchuser']
-        photoSearch= request.form['searchphoto']
-
         return redirect(url_for('searchUser'))
     
-    return render_template('Search.html')
+    return render_template('UserSearch.html')
 
+@app.route('/PhotoSearch', methods=['GET','POST'])
+def Search():
+    if request.method == 'POST':
+        photoSearch = request.form['searchphoto']
+        return redirect(url_for('searchPhoto'))
+    
+    return render_template('PhotoSearch.html')
 @app.route('/SearchUser')
 def searchUser():
     return render_template('SearchUser.html', value="useremail@example.com")

@@ -33,7 +33,8 @@
             <div class="collapse navbar-collapse" id="navbar">
               <div class="navbar-nav">
                 <a class="nav-item nav-link" id="Home" href="/">Home</a>
-                <a class="nav-item nav-link" id="home" href="/Search">Search</a>
+                <a class="nav-item nav-link" id="home" href="/UserSearch">Search For Users</a>
+                <a class="nav-item nav-link" id="home" href="/PhotoSearch">Search For Photos</a>
                 <a class="nav-item nav-link" id="AccountInfo" href="/AccountInfo">Account</a>
                 <a class="nav-item nav-link" id="home" href="/TopUsers">Top Users</a>
                 <a class="nav-item nav-link" id="home" href="/login">Logout</a>
@@ -42,12 +43,7 @@
           </nav>
     
     <!-- Content  -->
-      <form method= "POST" action="/Search">
-        <div class="form-group">
-          <label for="title">Search User</label>
-          <input type="text" class="form-control" name="searchuser" id="searchuser">
-        </div>
-        <button type="submit" class="btn btn-primary"> Submit </button>
+      <form method= "POST" action="/PhotoSearch">
         <div class="form-group">
           <label for="title">Search Photo</label>
           <input type="text" class="form-control" name="searchphoto" id="searchphoto">
