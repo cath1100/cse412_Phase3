@@ -3,11 +3,14 @@
         <div type="button"  id="friend-detail">
             <h5>Friend List</h5>
             <div class="list-group">
+            {% if friendlist != None %}
                {% for friend in friendlist %}
                 <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                     {{ friend }}
                 </a>
                {% endfor %}
+            {% endif %}
+            <a class="list-group-item list-group-item-action" aria-current="true">Zero Friends: Check Out Recommended Friends to Add!</a>
             </div>
         </div>
     </div>
