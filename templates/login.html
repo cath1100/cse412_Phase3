@@ -20,13 +20,16 @@
 
                                         <div class="col-4">
                                             <label for="loginemail" class="form-label">Email address</label>
-                                            <input type="email" class="form-control" id="loginemail" placeholder="name@example.com">
+                                            <input type="email" class="form-control" id="loginemail" placeholder="name@example.com" name="loginemail">
                                         </div>
                                         <div class="col-4">
                                             <label for="loginpassword" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="loginpassword">
+                                            <input type="password" class="form-control" id="loginpassword" name="loginpassword">
                                         </div>
 
+                                        <div>
+                                            <a href="{{ url_for('register') }}">Dont have an account? Register Here</a>
+                                        </div>
                                         <button class="btn btn-primary" type="submit">Log In</button>
                                     </form>
                                 </div>

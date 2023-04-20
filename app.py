@@ -1,32 +1,33 @@
-from flask import Flask, redirect, render_template, request, url_for
-import mysql.connector
-from mysql.connector import Error
-
-def create_connection(host_name, user_name, user_password):
-    connection = None
-    try:
-        connection = mysql.connector.connect(host=host_name,user=user_name,password=user_password)
-        print("Connection to MYSQL DB successful")
-    except Error as e:
-        print(f"The error '{e}' occurred")
-
-    return connection
-
-
-connection= create_connection('http://127.0.0.1', 'root', 'secret')
+from flask import Flask, redirect, render_template, request, url_for, session
+from db import *
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 app.config
 
+connection = create_connection("localhost", "root", "password", "photoshare")
+
 @app.route('/')
 def hello():
-    # return '<h1>testing</h1>'
-    friendslist = ["betty","chris","paul","josh"]
-    friendrecommendationlist = ["ryan","spencer","mia","alex"]
+    #Session Control:
+    session['logged_in'] = False
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return render_template('Home.html')
 
     return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist)
+
+@app.route('/home')
+def home():
+    if session.get('logged_in') == True:
+        friendslist = get_friend_list(session.get('user_id'))
+        print(friendslist)
+        friendrecommendationlist = ["ryan", "spencer", "mia", "alex"]
+
+        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist)
+
 
 
 @app.route('/AccountInfo')
@@ -53,17 +54,28 @@ def register():
         password = request.form['registerPassword']
         password_confirm = request.form['registerConfirmPasswordPassword']
         gender = request.form['registerGender']
-
-    return render_template('register.html')
-
+        register_user(first_name=firstname,last_name=lastname,email=email,hometown=hometown,date_of_birth=dob,password=password,gender=gender)
+        return redirect(url_for('login'))
+    else:
+        redirect(url_for('login'))
 @app.route('/login', methods=['GET','POST'])
 def login():
+    if request.method == 'GET':
+        return render_template('login.html')
     if request.method == 'POST':
+        print("before request")
         email = request.form['loginemail']
+        print(email)
         password = request.form['loginpassword']
+        try:
+            print("In the try")
+            loginQuery(email=email,password=password)
+            return redirect(url_for('home'))
 
+        except:
+            print("Invalid Login")
+            return redirect(url_for('login'))
 
-    return render_template('login.html')
 
 @app.route('/UserSearch', methods=['GET','POST'])
 def UserSearch():
