@@ -291,8 +291,22 @@ def addalbumQuery(name,user):
 #Contribution Score:
 def user_contribution_score():
     global connection
-    query = f'SELECT u.user_id, u.first_name, u.last_name, COUNT(p.photo_id) + COUNT(c.comment_id) AS contribution_count FROM Users u LEFT JOIN Photos p ON u.user_id = p.user_id LEFT JOIN Comments c ON u.user_id = c.user_id GROUP BY u.user_id, u.first_name, u.last_name ORDER BY contribution_count DESC LIMIT 10'
-    results = execute_query(connection, query)
+    query = ('''SELECT u.user_id, u.first_name, u.last_name, 
+                COUNT(DISTINCT p.photo_id) AS photos_uploaded, 
+                COUNT(DISTINCT c.comment_id) AS comments_left, 
+                COUNT(DISTINCT p.photo_id) + COUNT(DISTINCT c.comment_id) AS total_contribution
+                FROM Users u
+                LEFT JOIN Albums a ON u.user_id = a.user_id
+                LEFT JOIN Photos p ON u.user_id = a.user_id
+                LEFT JOIN Comments c ON u.user_id = c.user_id
+                GROUP BY u.user_id, u.first_name, u.last_name
+                ORDER BY total_contribution DESC
+                LIMIT 10; ''')
+    results = execute_read_query(connection, query)
+    list = []
+    for user in results:
+        list.append(user[1])
+    return list
 
 #================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
