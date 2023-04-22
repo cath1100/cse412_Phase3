@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <form action="{{ url_for('postphoto') }}" method="post" id="postphotoform" enctype = "multipart/form-data">
+            <div class="col-6">
+                <label for="registeremail" class="form-label">Caption</label>
+                <input type="text" class="form-control" id="caption" placeholder="" name="caption">
+            </div>
+            <div class="col-6">
+              <label for="photodata" class="form-label">Upload Image</label>
+              <input class="form-control" type="file" id="photodata" name="photodata">
+            </div>
+            <div class="col-6">
+                <label for="album_id">Your Albums</label>
+                <select class="form-select" aria-label="Default select example" name="album_id">
+                    {% if albums != None %}
+                        {% for album in albums %}
+                            <option value="{{ album[0] }}">{{ album[1] }}</option>
+                        {% endfor %}
+                    {% else %}
+                            <option>You have no Albums. Please create one</option>
+                    {% endif %}
+                </select>
+            </div>
+
+
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">Add new album</button>
+
+            <button form="postphotoform" type='submit' class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Create an Album</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+            <form id='addalbumform' action="{{ url_for('addalbums') }}" method="post">
+                <div class="col-6">
+                    <label for="albumname" class="form-label">Album Name</label>
+                    <input type="text" class="form-control" id="albumname" placeholder="" name="albumname">
+                </div>
+
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form='addalbumform' class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% macro photofeed(feed) %}
+    <div class="" style="background-color: #555555">
+        <div id="photofeed-top">
+            Username
+        </div>
+        <div id="photofeed-image" class="text-center">
+            {% if feed != None %}
+                {% for photo in feed %}
+            <figure class="figure">
+                <img src="{{ photo }}" height="250">
+            </figure>
+                {% endfor %}
+                {% else %}
+                <figure class="figure">
+                <img src="../../static/error404pic.png" height="250">
+            </figure>
+            {% endif %}
+        </div>
+        <div id="photofeed-bottom">
+            the comments
+        </div>
+    </div>
+{% endmacro %}

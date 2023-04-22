@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,7 +33,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
               <div class="navbar-nav">
-                <a class="nav-item nav-link" id="Home" href="/">Home</a>
+                <a class="nav-item nav-link" id="Home" href="/static">Home</a>
                 <a class="nav-item nav-link" id="home" href="/UserSearch">Search For Users</a>
                 <a class="nav-item nav-link" id="home" href="/PhotoSearch">Search For Photos</a>
                 <a class="nav-item nav-link" id="AccountInfo" href="/AccountInfo">Account</a>
@@ -43,6 +44,7 @@
           </nav>
     
     <!-- Content  -->
+    {% block content %}
       <form method= "POST" action="/PhotoSearch">
         <div class="form-group">
           <label for="title">Search Photo</label>
@@ -50,8 +52,8 @@
         </div>
         <button type="submit" class="btn btn-primary"> Submit </button>
       </form>
+    {% endblock %}
 
-      <div class="container">{% block content %} {% endblock %}</div>
         <script
           src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
           integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% from 'photofeed.html' import photofeed %}
-{% from 'friendlist.html' import friendlists %}
-{% from 'friendrecommendation.html' import friendrecommendations %}
+{% from 'macros/photofeed.html' import photofeed %}
+{% from 'macros/friendlist.html' import friendlists %}
+{% from 'macros/friendrecommendation.html' import friendrecommendations %}
 
 <!DOCTYPE html>
 <html>
@@ -38,7 +38,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
               <div class="navbar-nav">
-                <a class="nav-item nav-link" id="Home" href="/">Home</a>
+                <a class="nav-item nav-link" id="Home" href="/home">Home</a>
                 <a class="nav-item nav-link" id="home" href="/UserSearch">Search For Users</a>
                 <a class="nav-item nav-link" id="home" href="/PhotoSearch">Search For Photos</a>
                 <a class="nav-item nav-link" id="AccountInfo" href="/AccountInfo">Account</a>
@@ -54,7 +54,7 @@
                 {{ friendrecommendations(friendrecommendationlist) }}
             </div>
             <div class="col-6 px-0">
-                {{ photofeed() }}
+                {{ photofeed(feed) }}
             </div>
             <div class="col-3 px-0">
                 {{ friendlists(friendlist) }}

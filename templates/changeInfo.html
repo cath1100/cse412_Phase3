@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,21 +39,22 @@
               </div>
             </div>
           </nav>
+        {% block content %}
         <h2>Change Account Info</h2>
         <label for="Options">Choose a field you would want to change:</label>
-        <form action="{{url_for('ChangeInfo')}}" method='post'>
-          <select name="Options" id="Options">
-              <option value="First Name">First Name</option>
-              <option value="Last Name">Last Name</option>
-              <option value="Date of Birth">Date of Birth</option>
-              <option value="Hometown">Hometown</option>
-              <option value="Gender">Gender</option>
+        <form class="col-6" action="{{url_for('ChangeInfo')}}" method='post'>
+          <select class="form-control" name="Options" id="Options">
+              <option value="1">First Name</option>
+              <option value="2">Last Name</option>
+              <option value="5">Date of Birth</option>
+              <option value="4">Hometown</option>
+              <option value="7">Gender</option>
           </select>
           <p></p>
-          <input type="text" id="info" name="info"><br><br>
-          <input type="submit" value="Submit">
+          <input class="form-control" type="text" id="info" name="info"><br><br>
+          <input class="btn btn-dark" type="submit" value="Submit">
         </form>
-        <div class="container">{% block content %} {% endblock %}</div>
+        {% endblock %}
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

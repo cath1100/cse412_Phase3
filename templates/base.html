@@ -19,12 +19,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
           <div class="navbar-nav">
-            <a class="nav-item nav-link" id="Home" href="/">Home</a>
+            <a class="nav-item nav-link" id="Home" href="/home">Home</a>
             <a class="nav-item nav-link" id="home" href="/UserSearch">Search For Users</a>
             <a class="nav-item nav-link" id="home" href="/PhotoSearch">Search For Photos</a>
-                <a class="nav-item nav-link" id="AccountInfo" href="/AccountInfo">Account</a>
-                <a class="nav-item nav-link" id="home" href="/TopUsers">Top Users</a>
-                <a class="nav-item nav-link" id="home" href="/login">Logout</a>
+            <a class="nav-item nav-link" id="AccountInfo" href="/AccountInfo">Account</a>
+            <a class="nav-item nav-link" id="home" href="/TopUsers">Top Users</a>
+            <a class="nav-item nav-link" id="home" href="/login">Logout</a>
+            <a class="nav-iten nav-link" id="postphoto" href="/postphoto">Post a Photo</a>
           </div>
         </div>
       </nav>
@@ -34,6 +35,16 @@
             content
         {% endblock %}
     </div>
+
+<!-- Script JS -->
+<script>
+    const myModal = document.getElementById('myModal')
+    const myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', () => {
+    myInput.focus()
+    })
+</script>
 
 <!-- JS insertion:  -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
