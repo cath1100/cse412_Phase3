@@ -3,6 +3,7 @@ from mysql.connector import Error
 import hashlib
 from datetime import datetime, date
 from flask import session, redirect, url_for
+import datetime
 
 # ===============================================================================
 # tutorial: https://realpython.com/python-sql-libraries/#mysql
@@ -55,7 +56,7 @@ def loginQuery(email, password):
     if (results):
         print(f'Login for {email} successful.')
         print(results)
-        session['user_id'] = results
+        session['user_id'] = results[0][0]
         session['logged_in'] = True
         print(session['user_id'])
         # redirect to homepage
@@ -240,6 +241,7 @@ def get_albums_for_user(user_id):
     global connection
     query = f'SELECT * FROM albums WHERE user_id = "{user_id}"'
     results = execute_read_query(connection, query)
+    return results
     for album in results:
         print(album)
 
@@ -252,6 +254,47 @@ def delete_photo(photo_id):
 
 
 # ===============================================================================
+
+def friendrecommendationsQuery(user_id):
+    global connection
+    query = f'SELECT DISTINCT f2.user_id AS recommended_friend, COUNT(*) AS mutual_friends FROM Friends f1 JOIN Friends f2 ON f1.friend_id = f2.friend_id WHERE f1.user_id = "{user_id}" AND f2.user_id <> "{user_id}" GROUP BY f2.user_id HAVING COUNT(*) > 1 ORDER BY mutual_friends DESC'
+    results = execute_query(connection, query)
+   # for friend in results:
+    #    print(friend)
+
+#================================================================================
+def add_friend(user_id,friend_id):
+    global connection
+    query = f'INSERT INTO Friends(user_id,friend_id,date_of_friendship) VALUES ("{user_id}","{friend_id}",GETDATE())'
+    results = execute_query(connection, query)
+
+#================================================================================
+def photofeed():
+    global connection
+    query = f'SELECT data FROM Photos order by photo_id ASC'
+    results = execute_query(connection, query)
+    print("Photo Feed:"+str(results))
+    return results
+    print(query)
+
+#================================================================================
+
+def addalbumQuery(name,user):
+    global connection
+    now = datetime.datetime.now()
+    print(user)
+    query = f'INSERT INTO Albums (name, user_id, date_of_creation) VALUES ("{name}","{user}","{now.strftime("%Y-%m-%d %H:%M:%S")}")'
+    results = execute_query(connection, query)
+    print(results)
+#================================================================================
+
+#Contribution Score:
+def user_contribution_score():
+    global connection
+    query = f'SELECT u.user_id, u.first_name, u.last_name, COUNT(p.photo_id) + COUNT(c.comment_id) AS contribution_count FROM Users u LEFT JOIN Photos p ON u.user_id = p.user_id LEFT JOIN Comments c ON u.user_id = c.user_id GROUP BY u.user_id, u.first_name, u.last_name ORDER BY contribution_count DESC LIMIT 10'
+    results = execute_query(connection, query)
+
+#================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")

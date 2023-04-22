@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,6 +39,7 @@
               </div>
             </div>
           </nav>
+        {% block content %}
         <h2>Account Info</h2>
         <p>UserID: {{userid}}</p>
         <p>First Name: {{firstname}} </p>
@@ -47,7 +49,7 @@
         <p>Hometown: {{hometown}}</p>
         <p>Gender: {{gender}}</p>
         <button onclick="window.location.href = '/ChangeInfo';">CHANGE INFO</button>
-        <div class="container">{% block content %} {% endblock %}</div>
+        {% endblock %}
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
