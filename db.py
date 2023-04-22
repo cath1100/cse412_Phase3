@@ -223,8 +223,10 @@ def get_friend_list(user_id):
     global connection
     query = f'SELECT friend_id,date_of_friendship FROM friends WHERE user_id = "{user_id}"'
     results = execute_read_query(connection, query)
+    list = []
     for friend in results:
-        print(get_user_info(str(friend[0]))[0][1] + " added at " + friend[1])
+        list.append(get_user_info(str(friend[0]))[0][1])
+    return list
 
 
 # ===============================================================================
@@ -307,6 +309,13 @@ def user_contribution_score():
     for user in results:
         list.append(user[1])
     return list
+
+#================================================================================
+def search_user(user):
+    global connection
+    query = f'SELECT user_id FROM users WHERE email = {user}'
+    results = execute_read_query(connection, query)
+    return results
 
 #================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")

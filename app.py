@@ -100,6 +100,7 @@ def login():
 def UserSearch():
     if request.method == 'POST':
         userSearch = request.form['searchuser']
+        search_user(userSearch)
         return redirect(url_for('searchUser'))
     
     return render_template('searches/UserSearch.html')
