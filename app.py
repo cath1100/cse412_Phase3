@@ -26,10 +26,18 @@ def home():
         print(friendslist)
         friendrecommendationlist = friendrecommendationsQuery(session.get('user_id'))
         feed = photofeed()
-        print("Feed: "+ str(feed))
-        print(friendrecommendationlist)
 
-        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed)
+        #comments = get_photo_comments(feed[4])
+        #print("Feed: "+ str(feed))
+        print(friendrecommendationlist)
+        #print(feed)
+        commentfeed = []
+        #for photo in feed:
+        commentfeed.append(get_photo_comments(feed[1][4]))
+
+        print(commentfeed)
+
+        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed, commentfeed=commentfeed)
 
 
 
@@ -134,11 +142,11 @@ def postphoto():
         return render_template('postphoto.html', albums=albums)
     if request.method == "POST":
         caption = request.form['caption']
-        data = request.files['photodata'].stream
+        data = request.files['photodata'].filename
         print(data)
        # databin = convertToBinaryData(data)
         album_id = request.form['album_id']
-        #results = upload_photo(caption, data, album_id)
+        results = upload_photo(caption, data, album_id)
         return redirect(url_for('home'))
 
 
@@ -153,15 +161,6 @@ def addalbums():
     else:
         return redirect((url_for('postphoto')))
 
-
-
-
-
-def convertToBinaryData(filename):
-    # Convert digital data to binary format
-    with open(filename, 'rb') as file:
-        binaryData = file.read()
-    return binaryData
 
 if __name__ == '__main__':
     app.debug = True

@@ -137,6 +137,7 @@ def get_photo_comments(photo_id):
     global connection
     query = f'SELECT * FROM comments WHERE photo_id = "{photo_id}"'
     results = execute_read_query(connection, query)
+    return results
     for comment in results:
         print("Comment: " + comment[4] + " left by user " + get_user_info(str(comment[2]))[0][1] + " at " + comment[1])
 
@@ -260,7 +261,7 @@ def delete_photo(photo_id):
 def friendrecommendationsQuery(user_id):
     global connection
     query = f'SELECT DISTINCT f2.user_id AS recommended_friend, COUNT(*) AS mutual_friends FROM Friends f1 JOIN Friends f2 ON f1.friend_id = f2.friend_id WHERE f1.user_id = "{user_id}" AND f2.user_id <> "{user_id}" GROUP BY f2.user_id HAVING COUNT(*) > 1 ORDER BY mutual_friends DESC'
-    results = execute_query(connection, query)
+    results = execute_read_query(connection, query)
    # for friend in results:
     #    print(friend)
 
@@ -273,8 +274,9 @@ def add_friend(user_id,friend_id):
 #================================================================================
 def photofeed():
     global connection
-    query = f'SELECT data FROM Photos order by photo_id ASC'
-    results = execute_query(connection, query)
+    queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id '
+    query = f'SELECT * FROM Photos order by photo_id ASC'
+    results = execute_read_query(connection, queryfinal)
     print("Photo Feed:"+str(results))
     return results
     print(query)
@@ -293,6 +295,13 @@ def addalbumQuery(name,user):
 #Contribution Score:
 def user_contribution_score():
     global connection
+
+    query = f'SELECT u.user_id, u.first_name, u.last_name, COUNT(p.photo_id) + COUNT(c.comment_id) AS contribution_count FROM Users u LEFT JOIN Photos p ON u.user_id = p.user_id LEFT JOIN Comments c ON u.user_id = c.user_id GROUP BY u.user_id, u.first_name, u.last_name ORDER BY contribution_count DESC LIMIT 10'
+    results = execute_read_query(connection, query)
+#================================================================================
+def load_userinfo_from_albumID(album_id):
+    global connection
+
     query = ('''SELECT u.user_id, u.first_name, u.last_name, 
                 COUNT(DISTINCT p.photo_id) AS photos_uploaded, 
                 COUNT(DISTINCT c.comment_id) AS comments_left, 
@@ -305,17 +314,15 @@ def user_contribution_score():
                 ORDER BY total_contribution DESC
                 LIMIT 10; ''')
     results = execute_read_query(connection, query)
-    list = []
-    for user in results:
-        list.append(user[1])
-    return list
-
+    return results
+  
 #================================================================================
 def search_user(user):
     global connection
     query = f'SELECT user_id FROM users WHERE email = {user}'
     results = execute_read_query(connection, query)
     return results
+
 
 #================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
