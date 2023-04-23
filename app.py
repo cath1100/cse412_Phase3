@@ -8,6 +8,10 @@ app.config
 
 connection = create_connection("localhost", "root", "password", "photoshare")
 
+#global variable declaration
+testEmail = "was not"
+testUserID = "-1"
+
 @app.route('/')
 def hello():
     #Session Control:
@@ -107,9 +111,17 @@ def login():
 @app.route('/UserSearch', methods=['GET','POST'])
 def UserSearch():
     if request.method == 'POST':
+        global testEmail
+        global testUserID
         userSearch = request.form['searchuser']
-        search_user(userSearch)
-        return redirect(url_for('searchUser'))
+        try:
+            results = search_user(userSearch)
+            testUserID = results[0][0]
+            testEmail = userSearch
+            return redirect(url_for('searchUser'))
+        except:
+            print("user not found")
+            return redirect(url_for('UserSearch'))
     
     return render_template('searches/UserSearch.html')
 
@@ -120,9 +132,15 @@ def Search():
         return redirect(url_for('searchPhoto'))
     
     return render_template('searches/PhotoSearch.html')
+
 @app.route('/SearchUser')
 def searchUser():
-    return render_template('searches/SearchUser.html', value="useremail@example.com")
+    friendID = get_user_info(testUserID)
+    print(friendID[0][0])
+    userID = get_user_info(session.get('user_id'))
+    print(userID[0][0])
+    results = add_friend(friendID[0][0],userID[0][0])
+    return render_template('searches/SearchUser.html', value=testEmail)
 
 @app.route('/SearchPhoto')
 def searchPhoto():
