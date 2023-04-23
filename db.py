@@ -345,18 +345,20 @@ def search_by_tag(tags):
     tag_list = tags.split(" ")
     tag_count = len(tag_list)
     tag_list = tag_list[:5] + [""] * (5 - len(tag_list))
-    query = (f'''SELECT p.*
+    query = (f'''SELECT u.first_name, u.last_name, p.data, p.caption, p.photo_id
                  FROM Photos p
                  JOIN Tags t ON p.photo_id = t.photo_id
+                 JOIN Albums a ON p.album_id = a.album_id
+                 JOIN Users u ON u.user_id = a.user_id
                  WHERE t.text IN ('{tag_list[0]}', '{tag_list[1]}' , '{tag_list[2]}' ,'{tag_list[3]}' ,'{tag_list[4]}') 
                  GROUP BY p.photo_id
                  HAVING COUNT(*) = {tag_count} ''')
     results = execute_read_query(connection, query)
-    list = []
-    for photo in results:
-        list.append(photo[2])
-    print(list)
-    return list
+    #list = []
+    #for photo in results:
+    #    list.append(photo[2])
+    #print(list)
+    return results
 
 #================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
