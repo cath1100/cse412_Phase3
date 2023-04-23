@@ -295,9 +295,24 @@ def addalbumQuery(name,user):
 #Contribution Score:
 def user_contribution_score():
     global connection
-
     query = f'SELECT u.user_id, u.first_name, u.last_name, COUNT(p.photo_id) + COUNT(c.comment_id) AS contribution_count FROM Users u LEFT JOIN Photos p ON u.user_id = p.user_id LEFT JOIN Comments c ON u.user_id = c.user_id GROUP BY u.user_id, u.first_name, u.last_name ORDER BY contribution_count DESC LIMIT 10'
+    results = execute_query(connection, query)
+    query = ('''SELECT u.user_id, u.first_name, u.last_name, 
+                COUNT(DISTINCT p.photo_id) AS photos_uploaded, 
+                COUNT(DISTINCT c.comment_id) AS comments_left, 
+                COUNT(DISTINCT p.photo_id) + COUNT(DISTINCT c.comment_id) AS total_contribution
+                FROM Users u
+                LEFT JOIN Albums a ON u.user_id = a.user_id
+                LEFT JOIN Photos p ON u.user_id = a.user_id
+                LEFT JOIN Comments c ON u.user_id = c.user_id
+                GROUP BY u.user_id, u.first_name, u.last_name
+                ORDER BY total_contribution DESC
+                LIMIT 10; ''')
     results = execute_read_query(connection, query)
+    list = []
+    for user in results:
+        list.append(user[1])
+    return list
 #================================================================================
 def load_userinfo_from_albumID(album_id):
     global connection
@@ -325,6 +340,25 @@ def search_user(user):
 
 
 #================================================================================
+def search_by_tag(tags):
+    global connection
+    tag_list = tags.split(" ")
+    tag_count = len(tag_list)
+    tag_list = tag_list[:5] + [""] * (5 - len(tag_list))
+    query = (f'''SELECT p.*
+                 FROM Photos p
+                 JOIN Tags t ON p.photo_id = t.photo_id
+                 WHERE t.text IN ('{tag_list[0]}', '{tag_list[1]}' , '{tag_list[2]}' ,'{tag_list[3]}' ,'{tag_list[4]}') 
+                 GROUP BY p.photo_id
+                 HAVING COUNT(*) = {tag_count} ''')
+    results = execute_read_query(connection, query)
+    list = []
+    for photo in results:
+        list.append(photo[2])
+    print(list)
+    return list
+
+#================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
@@ -340,3 +374,4 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # get_friend_list("1")
 # most_popular_tags()
 # get_albums_for_user("1")
+#search_by_tag("music")
