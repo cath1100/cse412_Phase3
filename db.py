@@ -117,18 +117,27 @@ def get_photo_likes(photo_id):
     global connection
     query = f'SELECT * FROM likes WHERE photo_id = "{photo_id}"'
     results = execute_read_query(connection, query)
+    return results
     count = 0
-    for like in results:
-        count = count + 1
-        liked_by = get_user_info(str(like[0]))[0][1]
-        print(liked_by)
-
+    likedby = []
+    # for like in results:
+    #     count = count + 1
+    #     print(like)
+    #     likedby += str(get_user_info(str(like[0]))[0] + get_user_info(str(like[0]))[1])
+    #     print(likedby)
+    #     #print(liked_by)
+    #
+    # for liked in likedby:
+    #     print(liked)
+    #
+    # return likedby
 
 # ===============================================================================
 def get_photo_like_count(photo_id):
     global connection
-    query = f'SELECT COUNT(*) FROM likes WHERE photo_id = {photo_id}'
+    query = f'SELECT COUNT(*),likes.photo_id FROM likes WHERE photo_id = {photo_id}'
     results = execute_read_query(connection, query)
+    return results
     print(results[0][0])
 
 
@@ -275,12 +284,12 @@ def add_friend(user_id,friend_id):
 #================================================================================
 def photofeed():
     global connection
-    queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id '
+    queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id order by photos.photo_id ASC'
     query = f'SELECT * FROM Photos order by photo_id ASC'
     results = execute_read_query(connection, queryfinal)
-    print("Photo Feed:"+str(results))
+    #print("Photo Feed:"+str(results))
     return results
-    print(query)
+   # print(query)
 
 #================================================================================
 
