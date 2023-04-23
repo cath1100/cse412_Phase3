@@ -132,7 +132,7 @@ def UserSearch():
 def Search():
     if request.method == 'POST':
         photoSearch = request.form['searchphoto']
-        return redirect(url_for('searchPhoto'))
+        return redirect(url_for('searchPhoto', tags = photoSearch))
     
     return render_template('searches/PhotoSearch.html')
 
@@ -147,13 +147,16 @@ def searchUser():
 
 @app.route('/SearchPhoto')
 def searchPhoto():
-    return render_template('searches/SearchPhotos.html')
+    tags = request.args['tags']
+    results = search_by_tag(tags)
+    print(results)
+    return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
 
 @app.route('/TopUsers')
 def listUsers():
     results = user_contribution_score()
     print(results)
-    return render_template('topUsers.html', user1 =results[0], user2 = results[1], user3=results[2], user4=results[3], user5 =results[4])
+    return render_template('topUsers.html', results=results)
 
 
 @app.route('/postphoto',methods=["POST","GET"])

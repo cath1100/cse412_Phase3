@@ -1,0 +1,16 @@
+{% macro topusers(userlist) %}
+<div style="background-color: #9C1A1C">
+    <div type="button" id="friend-detail">
+        <h5>Top Users</h5>
+        <div class="list-group">
+            {% if userlist != None %}
+            {% for user in userlist %}
+            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                {{ user }}
+            </a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
