@@ -127,8 +127,9 @@ def get_photo_likes(photo_id):
 # ===============================================================================
 def get_photo_like_count(photo_id):
     global connection
-    query = f'SELECT COUNT(*) FROM likes WHERE photo_id = {photo_id}'
+    query = f'SELECT COUNT(*),likes.photo_id FROM likes WHERE photo_id = {photo_id}'
     results = execute_read_query(connection, query)
+    return results
     print(results[0][0])
 
 

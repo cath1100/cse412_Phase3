@@ -27,22 +27,22 @@ def hello():
 def home():
     if session.get('logged_in') == True:
         friendslist = get_friend_list(session.get('user_id'))
-        print(friendslist)
+
+        # print(friendslist)
         friendrecommendationlist = friendrecommendationsQuery(session.get('user_id'))
         feed = photofeed()
-
-        #comments = get_photo_comments(feed[4])
-        #print("Feed: "+ str(feed))
-        print(friendrecommendationlist)
-        #print(feed)
+        print(feed[0])
         commentfeed = []
-        #for photo in feed:
-        commentfeed.append(get_photo_comments(feed[1][4]))
-
+        friendlikes = []
+        friendlikesCount = []
         print(commentfeed)
+        for photo in feed:
+            commentfeed += get_photo_comments(photo[4])
+            friendlikesCount += get_photo_like_count(photo[4])
 
-        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed, commentfeed=commentfeed)
-
+        return render_template('Home.html', friendlist=friendslist, friendrecommendationlist=friendrecommendationlist,
+                               feed=feed, commentfeed=commentfeed, friendlikes=friendlikes,
+                               friendlikesCount=friendlikesCount)
 
 
 @app.route('/AccountInfo')
@@ -178,6 +178,25 @@ def addalbums():
         return redirect(url_for('postphoto'))
     else:
         return redirect((url_for('postphoto')))
+
+@app.route('/updatelike',methods=['POST'])
+def updateLikes():
+    if request.method == "POST":
+        photo_id = request.values['photo_id']
+        add_like(photo_id,session.get('user_id'))
+        return redirect((url_for('home')))
+
+
+
+
+@app.route('/commentsearch', methods=["POST","GET"])
+def commentSearch():
+    if request.method == "GET":
+        return render_template('searches/searchcomment.html')
+    if request.method == "POST":
+        comment = request.form['searchcomment']
+
+        return render_template('searches/searchcomment.html')
 
 
 if __name__ == '__main__':
