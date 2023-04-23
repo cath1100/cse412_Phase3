@@ -23,21 +23,24 @@ def hello():
 def home():
     if session.get('logged_in') == True:
         friendslist = get_friend_list(session.get('user_id'))
-        print(friendslist)
+
+        #print(friendslist)
         friendrecommendationlist = friendrecommendationsQuery(session.get('user_id'))
         feed = photofeed()
-
-        #comments = get_photo_comments(feed[4])
-        #print("Feed: "+ str(feed))
-        print(friendrecommendationlist)
-        #print(feed)
-        commentfeed = []
-        #for photo in feed:
-        commentfeed.append(get_photo_comments(feed[1][4]))
-
+        print(feed[0])
+        commentfeed=[]
+        friendlikes = []
+        friendlikesCount = []
         print(commentfeed)
+        for photo in feed:
+            commentfeed += get_photo_comments(photo[4])
+            friendlikesCount += get_photo_like_count(photo[4])
 
-        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed, commentfeed=commentfeed)
+
+
+
+
+        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed, commentfeed=commentfeed, friendlikes=friendlikes, friendlikesCount=friendlikesCount)
 
 
 
@@ -161,6 +164,12 @@ def addalbums():
     else:
         return redirect((url_for('postphoto')))
 
+@app.route('/updatelike',methods=['POST'])
+def updateLikes():
+    if request.method == "POST":
+        photo_id = request.values['photo_id']
+        add_like(photo_id,session.get('user_id'))
+        return redirect((url_for('home')))
 
 if __name__ == '__main__':
     app.debug = True
