@@ -117,12 +117,20 @@ def get_photo_likes(photo_id):
     global connection
     query = f'SELECT * FROM likes WHERE photo_id = "{photo_id}"'
     results = execute_read_query(connection, query)
+    return results
     count = 0
-    for like in results:
-        count = count + 1
-        liked_by = get_user_info(str(like[0]))[0][1]
-        print(liked_by)
-
+    likedby = []
+    # for like in results:
+    #     count = count + 1
+    #     print(like)
+    #     likedby += str(get_user_info(str(like[0]))[0] + get_user_info(str(like[0]))[1])
+    #     print(likedby)
+    #     #print(liked_by)
+    #
+    # for liked in likedby:
+    #     print(liked)
+    #
+    # return likedby
 
 # ===============================================================================
 def get_photo_like_count(photo_id):
@@ -276,12 +284,12 @@ def add_friend(user_id,friend_id):
 #================================================================================
 def photofeed():
     global connection
-    queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id '
+    queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id order by photos.photo_id ASC'
     query = f'SELECT * FROM Photos order by photo_id ASC'
     results = execute_read_query(connection, queryfinal)
-    print("Photo Feed:"+str(results))
+    #print("Photo Feed:"+str(results))
     return results
-    print(query)
+   # print(query)
 
 #================================================================================
 
@@ -297,9 +305,24 @@ def addalbumQuery(name,user):
 #Contribution Score:
 def user_contribution_score():
     global connection
-
     query = f'SELECT u.user_id, u.first_name, u.last_name, COUNT(p.photo_id) + COUNT(c.comment_id) AS contribution_count FROM Users u LEFT JOIN Photos p ON u.user_id = p.user_id LEFT JOIN Comments c ON u.user_id = c.user_id GROUP BY u.user_id, u.first_name, u.last_name ORDER BY contribution_count DESC LIMIT 10'
+    results = execute_query(connection, query)
+    query = ('''SELECT u.user_id, u.first_name, u.last_name, 
+                COUNT(DISTINCT p.photo_id) AS photos_uploaded, 
+                COUNT(DISTINCT c.comment_id) AS comments_left, 
+                COUNT(DISTINCT p.photo_id) + COUNT(DISTINCT c.comment_id) AS total_contribution
+                FROM Users u
+                LEFT JOIN Albums a ON u.user_id = a.user_id
+                LEFT JOIN Photos p ON u.user_id = a.user_id
+                LEFT JOIN Comments c ON u.user_id = c.user_id
+                GROUP BY u.user_id, u.first_name, u.last_name
+                ORDER BY total_contribution DESC
+                LIMIT 10; ''')
     results = execute_read_query(connection, query)
+    list = []
+    for user in results:
+        list.append(user[1])
+    return list
 #================================================================================
 def load_userinfo_from_albumID(album_id):
     global connection
@@ -325,6 +348,27 @@ def search_user(user):
     results = execute_read_query(connection, query)
     return results
 
+
+#================================================================================
+def search_by_tag(tags):
+    global connection
+    tag_list = tags.split(" ")
+    tag_count = len(tag_list)
+    tag_list = tag_list[:5] + [""] * (5 - len(tag_list))
+    query = (f'''SELECT u.first_name, u.last_name, p.data, p.caption, p.photo_id
+                 FROM Photos p
+                 JOIN Tags t ON p.photo_id = t.photo_id
+                 JOIN Albums a ON p.album_id = a.album_id
+                 JOIN Users u ON u.user_id = a.user_id
+                 WHERE t.text IN ('{tag_list[0]}', '{tag_list[1]}' , '{tag_list[2]}' ,'{tag_list[3]}' ,'{tag_list[4]}') 
+                 GROUP BY p.photo_id
+                 HAVING COUNT(*) = {tag_count} ''')
+    results = execute_read_query(connection, query)
+    #list = []
+    #for photo in results:
+    #    list.append(photo[2])
+    #print(list)
+    return results
 
 #================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")

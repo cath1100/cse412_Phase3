@@ -1,11 +1,11 @@
-{% macro commentsfeed(comments) %}
+{% macro commentsfeed(comments,id) %}
 
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <i class="fa-solid fa-comment fa-lg px-2"></i>
-    </button>
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{ id | string }}">
+                <i class="fa-solid fa-comment fa-lg px-2"></i>
+            </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal{{ id | string }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -14,16 +14,16 @@
           </div>
           <div class="modal-body">
             {% if comments != "" %}
-                {% for comment in comments[0] %}
-                    <label class="px-2">{{ comment[4] }}</label>
-                {% endfor %}
+{#                {% for comment in comments %}#}
+                    <label class="px-2">{{ comments[4] }}</label>
+{#                {% endfor %}#}
                 {% else %}
                 <label>No Comments</label>
               {% endif %}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+{#            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>#}
+{#            <button type="button" class="btn btn-primary">Save changes</button>#}
           </div>
         </div>
       </div>
