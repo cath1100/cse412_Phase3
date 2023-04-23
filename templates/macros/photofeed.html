@@ -1,23 +1,30 @@
-{% macro photofeed(feed) %}
+{#{% from 'macros/commentsmodal.html' import commentsfeed %}#}
+{% macro photofeed(feed,commentfeed) %}
+    {% from 'macros/commentsmodal.html' import commentsfeed %}
     <div class="" style="background-color: #555555">
-        <div id="photofeed-top">
-            Username
-        </div>
-        <div id="photofeed-image" class="text-center">
-            {% if feed != None %}
+        {% if feed != None %}
                 {% for photo in feed %}
+        <h5 id="photofeed-top">
+            <a>{{ photo[0] }} {{ photo[1] }}</a>
+        </h5>
+        <div id="photofeed-image" class="text-center">
             <figure class="figure">
-                <img src="{{ photo }}" height="250">
+                <img src="{{ photo[2].decode() }}" height="250" alt="its somewhere">
             </figure>
-                {% endfor %}
-                {% else %}
-                <figure class="figure">
-                <img src="../../static/error404pic.png" height="250">
-            </figure>
-            {% endif %}
         </div>
         <div id="photofeed-bottom">
-            the comments
+            <h5>caption: {{ photo[3] }}</h5>
+{#            {% if commentfeed[0] == photo[4] %}#}
+                {{ commentsfeed(commentfeed) }}
+{#            {% endif %}#}
         </div>
+                    <hr>
+        {% endfor %}
+                {% else %}
+            <figure class="figure">
+                <img src="../../static/error404pic.png" height="250">
+            </figure>
+        {% endif %}
+
     </div>
 {% endmacro %}
