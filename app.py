@@ -195,7 +195,8 @@ def commentSearch():
         return render_template('searches/searchcomment.html')
     if request.method == "POST":
         comment = request.form['searchcomment']
-
+        results = search_comments(comment)
+        print(results)
         return render_template('searches/searchcomment.html')
 
 

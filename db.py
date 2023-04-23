@@ -327,6 +327,13 @@ def search_user(user):
 
 
 #================================================================================
+
+def search_comments(text):
+    global connection
+    query = f'SELECT c.text FROM Comments c WHERE c.text="{text}"'
+    results = execute_read_query(connection,query)
+    return results
+#================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
