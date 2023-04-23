@@ -267,7 +267,8 @@ def friendrecommendationsQuery(user_id):
 #================================================================================
 def add_friend(user_id,friend_id):
     global connection
-    query = f'INSERT INTO Friends(user_id,friend_id,date_of_friendship) VALUES ("{user_id}","{friend_id}",GETDATE())'
+    current_time = date.today().strftime("%m/%d/%y") 
+    query = f'INSERT INTO Friends(user_id,friend_id,date_of_friendship) VALUES ("{user_id}","{friend_id}","{current_time}")'
     results = execute_query(connection, query)
 
 #================================================================================
@@ -313,7 +314,7 @@ def user_contribution_score():
 #================================================================================
 def search_user(user):
     global connection
-    query = f'SELECT user_id FROM users WHERE email = {user}'
+    query = f'SELECT user_id FROM users WHERE email = "{user}"'
     results = execute_read_query(connection, query)
     return results
 
