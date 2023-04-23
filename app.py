@@ -108,6 +108,7 @@ def login():
 def UserSearch():
     if request.method == 'POST':
         userSearch = request.form['searchuser']
+        search_user(userSearch)
         return redirect(url_for('searchUser'))
     
     return render_template('searches/UserSearch.html')
@@ -129,9 +130,9 @@ def searchPhoto():
 
 @app.route('/TopUsers')
 def listUsers():
-    #results = user_contribution_score()
-    #print(results)
-    return render_template('topUsers.html', user1 ="user1", user2 = "user2", user3="user3", user4="user4", user5 ="user5")
+    results = user_contribution_score()
+    print(results)
+    return render_template('topUsers.html', user1 =results[0], user2 = results[1], user3=results[2], user4=results[3], user5 =results[4])
 
 
 @app.route('/postphoto',methods=["POST","GET"])
