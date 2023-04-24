@@ -41,8 +41,15 @@
     {% block content %}
     <form method="POST" action="/PhotoSearch">
         <div class="form-group">
-            <label for="title">Search Photo</label>
+            <label for="title">Search All Photos</label>
             <input type="text" class="form-control" name="searchphoto" id="searchphoto">
+        </div>
+        <button type="submit" class="btn btn-primary"> Submit </button>
+    </form>
+    <form method="POST" action="/PhotoSearchUser">
+        <div class="form-group">
+            <label for="title">Search My Photos</label>
+            <input type="text" class="form-control" name="searchphoto1" id="searchphoto1">
         </div>
         <button type="submit" class="btn btn-primary"> Submit </button>
     </form>

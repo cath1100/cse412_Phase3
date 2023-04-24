@@ -129,8 +129,19 @@ def UserSearch():
 def Search():
     if request.method == 'POST':
         photoSearch = request.form['searchphoto']
-        return redirect(url_for('searchPhoto', tags = photoSearch))
+        for_user = "2"
+        return redirect(url_for('searchPhoto', tags = photoSearch, user=for_user))
     
+    return render_template('searches/PhotoSearch.html')
+
+
+@app.route('/PhotoSearchUser', methods=['GET','POST'])
+def SearchTagsUser():
+    if request.method == 'POST':
+        photoSearch = request.form['searchphoto1']
+        for_user = "1"
+        return redirect(url_for('searchPhoto', tags = photoSearch, user=for_user))
+
     return render_template('searches/PhotoSearch.html')
 
 @app.route('/SearchUser')
@@ -145,9 +156,18 @@ def searchUser():
 @app.route('/SearchPhoto')
 def searchPhoto():
     tags = request.args['tags']
-    results = search_by_tag(tags)
-    print(results)
-    return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
+    user = request.args['user']
+    if(user == "1"):
+        print("1")
+        user_id = session.get('user_id')
+        results = search_by_tag_user(tags, user_id)
+        return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
+    else:
+        print("2")
+        results = search_by_tag(tags)
+        print(results)
+        return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
+    return render_template('searches/PhotoSearch.html')
 
 @app.route('/TopUsers')
 def listUsers():

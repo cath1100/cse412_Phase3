@@ -371,6 +371,24 @@ def search_by_tag(tags):
     return results
 
 #================================================================================
+def search_by_tag_user(tags, user_id):
+    global connection
+    tag_list = tags.split(" ")
+    tag_count = len(tag_list)
+    tag_list = tag_list[:5] + [""] * (5 - len(tag_list))
+    query = (f'''SELECT u.first_name, u.last_name, p.data, p.caption, p.photo_id
+                 FROM Photos p
+                 JOIN Tags t ON p.photo_id = t.photo_id
+                 JOIN Albums a ON p.album_id = a.album_id
+                 JOIN Users u ON u.user_id = a.user_id
+                 WHERE t.text IN ('{tag_list[0]}', '{tag_list[1]}' , '{tag_list[2]}' ,'{tag_list[3]}' ,'{tag_list[4]}') 
+                 AND a.user_id = "{user_id}"
+                 GROUP BY p.photo_id
+                 HAVING COUNT(*) = {tag_count} ''')
+    print(query)
+    results = execute_read_query(connection, query)
+    return results
+
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
@@ -386,3 +404,4 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # get_friend_list("1")
 # most_popular_tags()
 # get_albums_for_user("1")
+search_by_tag_user("music", "1")
