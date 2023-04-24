@@ -1,0 +1,16 @@
+{% macro toptags(taglist) %}
+<div style="background-color: #9C1A1C">
+    <div type="button" id="friend-detail">
+        <h5>Top Tags</h5>
+        <div class="list-group">
+            {% if taglsit != None %}
+            {% for user in taglist %}
+            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                {{ user[0] }}
+            </a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %}

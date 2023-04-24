@@ -180,6 +180,11 @@ def listUsers():
     print(results)
     return render_template('topUsers.html', results=results)
 
+@app.route('/TopTags')
+def toptags():
+    results = top_tags()
+    return render_template('topTags.html', results = results)
+
 
 @app.route('/postphoto',methods=["POST","GET"])
 def postphoto():

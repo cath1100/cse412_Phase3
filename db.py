@@ -404,6 +404,15 @@ def search_by_tag_user(tags, user_id):
     results = execute_read_query(connection, query)
     return results
 
+#================================================================================
+def top_tags():
+    global connection
+    query = "SELECT text, COUNT(*) AS tag_count FROM Tags GROUP BY text ORDER BY tag_count DESC;"
+    results = execute_read_query(connection, query)
+    print(results)
+    return results
+
+
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
@@ -420,3 +429,4 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # most_popular_tags()
 # get_albums_for_user("1")
 #search_by_tag_user("music", "1")
+#top_tags()
