@@ -296,7 +296,7 @@ def photofeed():
     queryfinal = f'SELECT users.first_name, users.last_name, photos.data, photos.caption, photos.photo_id FROM users JOIN albums ON users.user_id = albums.user_id JOIN photos ON photos.album_id = albums.album_id order by photos.photo_id ASC'
     query = f'SELECT * FROM Photos order by photo_id ASC'
     results = execute_read_query(connection, queryfinal)
-    #print("Photo Feed:"+str(results))
+    print(results)
     return results
    # print(query)
 
@@ -420,6 +420,30 @@ def top_tags():
     return results
 
 #================================================================================
+def reccomended_photos(user_id):
+    global connection
+    query = (f'''SELECT u.first_name, u.last_name, p.data, p.caption, p.photo_id, COUNT(*) AS num_tags
+                                  FROM Photos p
+                                  INNER JOIN Tags t ON p.photo_id = t.photo_id
+                                  INNER JOIN Albums a on p.album_id = a.album_id
+                                  INNER JOIN Users u on u.user_id = a.user_id
+                                  WHERE t.text IN (
+                                  SELECT text
+                                  FROM Tags
+                                  WHERE photo_id IN (
+                                  SELECT photo_id
+                                  FROM Photos
+                                  LEFT JOIN Albums on Albums.album_id = Photos.album_id
+                                  WHERE user_id = {user_id}
+                                  )
+                                  GROUP BY text
+                                  ORDER BY COUNT(*) DESC
+                                  )
+                                  GROUP BY p.photo_id, p.caption
+                                  ORDER BY num_tags DESC, COUNT(*) ASC''')
+    results = execute_read_query(connection, query)
+    return results
+#================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
@@ -437,4 +461,5 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # get_albums_for_user("1")
 #search_by_tag_user("music", "1")
 #top_tags()
-friendrecommendationsQuery("1")
+#friendrecommendationsQuery("1")
+#photofeed()

@@ -257,6 +257,13 @@ def albumview():
         print(result)
         return render_template('macros/albummacro.html', result=result, photoresult=photoresult)
 
+@app.route('/photorecs',methods=["GET"])
+def recs():
+    if request.method == "GET":
+        user_id = session.get('user_id')
+        results = reccomended_photos(user_id)
+        return render_template('/recommendedPhotos.html', results=results)
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
