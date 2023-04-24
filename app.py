@@ -165,12 +165,10 @@ def searchPhoto():
     tags = request.args['tags']
     user = request.args['user']
     if(user == "1"):
-        print("1")
         user_id = session.get('user_id')
         results = search_by_tag_user(tags, user_id)
         return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
     else:
-        print("2")
         results = search_by_tag(tags)
         print(results)
         return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
