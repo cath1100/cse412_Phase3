@@ -271,10 +271,15 @@ def delete_photo(photo_id):
 
 def friendrecommendationsQuery(user_id):
     global connection
-    query = f'SELECT DISTINCT f2.user_id AS recommended_friend, COUNT(*) AS mutual_friends FROM Friends f1 JOIN Friends f2 ON f1.friend_id = f2.friend_id WHERE f1.user_id = "{user_id}" AND f2.user_id <> "{user_id}" GROUP BY f2.user_id HAVING COUNT(*) > 1 ORDER BY mutual_friends DESC'
+    query = (f'''SELECT DISTINCT f2.user_id AS recommended_friend, 
+    COUNT(*) AS mutual_friends FROM Friends f1 
+    JOIN Friends f2 ON f1.friend_id = f2.friend_id WHERE f1.user_id = "{user_id}" AND f2.user_id <> "{user_id}" 
+    GROUP BY f2.user_id HAVING COUNT(*) > 1 ORDER BY mutual_friends DESC''')
     results = execute_read_query(connection, query)
-   # for friend in results:
-    #    print(friend)
+    list = []
+    for friend in results:
+        list.append(get_user_info(str(friend[0]))[0][3])
+    return list
 
 #================================================================================
 def add_friend(user_id,friend_id):
@@ -412,7 +417,7 @@ def top_tags():
     print(results)
     return results
 
-
+#================================================================================
 connection = create_connection("localhost", "root", "password", "photoshare")
 # login("wilerRockAndRoll@gmail.com", "password10")
 # register_user("hari", "ramalingame", "hramali1@asu.edu", "chicago", "05/09/2023", "password", "male")
@@ -430,3 +435,4 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # get_albums_for_user("1")
 #search_by_tag_user("music", "1")
 #top_tags()
+friendrecommendationsQuery("1")
