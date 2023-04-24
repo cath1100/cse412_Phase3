@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form id="addtagform" action="{{ url_for('addtag') }} " method="post">
+        <label for="photo_id" id="photo_idlabel">Photo ID to add tag to:</label>
+        <input class="form-control" name="photo_id" id="photo_id">
+        <label for="tagname" id="tagnamelabel">Tag Name:</label>
+        <input class="form-control" name="tagname" id="tagname">
+        <button class="btn btn-primary" type="submit" >Submit</button>
+    </form>
+
+
+{% endblock %}

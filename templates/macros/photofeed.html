@@ -1,5 +1,5 @@
 {#{% from 'macros/commentsmodal.html' import commentsfeed %}#}
-{% macro photofeed(feed,commentfeed,friendslikesCount) %}
+{% macro photofeed(feed,commentfeed,friendslikesCount,tags) %}
     {% from 'macros/commentsmodal.html' import commentsfeed %}
     <div class="" style="background-color: #555555">
         {% if feed != None %}
@@ -14,6 +14,17 @@
             </figure>
         </div>
         <div id="photofeed-bottom">
+        <div>
+            <label>Tags: </label>
+            {% for tag in tags %}
+                {% if tag[0] == photo[4] %}
+{#                   # <form action="{{ url_for('searchPhoto',tags=tag[1], user=0) }}" method="get">#}
+                        <button type="submit" value="{{ tag[1] }}">{{ tag[1] }}</button>
+{#                    </form>#}
+
+                {% endif %}
+            {% endfor %}
+        </div>
             <div class="row">
             {% for likeCount in friendslikesCount %}
                 {% if likeCount[1] == photo[4] %}
