@@ -1,5 +1,5 @@
 {#{% from 'macros/commentsmodal.html' import commentsfeed %}#}
-{% macro photofeed(feed,commentfeed) %}
+{% macro photofeed(feed,commentfeed,friendslikesCount) %}
     {% from 'macros/commentsmodal.html' import commentsfeed %}
     <div class="" style="background-color: #555555">
         {% if feed != None %}
@@ -7,16 +7,39 @@
         <h5 id="photofeed-top">
             <a>{{ photo[0] }} {{ photo[1] }}</a>
         </h5>
+                    <input hidden value="{{ photo[4] }}" id="photo_id" name="photo_id"></input>
         <div id="photofeed-image" class="text-center">
             <figure class="figure">
                 <img src="{{ photo[2].decode() }}" height="250" alt="its somewhere">
             </figure>
         </div>
         <div id="photofeed-bottom">
+            <div class="row">
+            {% for likeCount in friendslikesCount %}
+                {% if likeCount[1] == photo[4] %}
+
+                <form method="post" action="{{ url_for('updateLikes') }}">
+                    <input hidden value="{{ photo[4] }}" id="photo_id" name="photo_id"></input>
+                    <h4 id="likecount" name="likecount" class="col-2">{{ likeCount[0] }}</h4>
+                    <button type="submit" class="btn btn-light col-1" >Like</button>
+                </form>
+                {% endif %}
+            {% endfor %}
+            </div>
             <h5>caption: {{ photo[3] }}</h5>
-{#            {% if commentfeed[0] == photo[4] %}#}
-                {{ commentsfeed(commentfeed) }}
-{#            {% endif %}#}
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{ photo[4] | string }}">
+                <i class="fa-solid fa-comment fa-lg px-2"></i>
+            </button>
+            <div id="comments" class="vertical">
+                <h6>Comments:</h6>
+                {% for comment in commentfeed %}
+                    {% if comment[0] == photo[4] %}
+                        <lable>{{ comment[4] }}</lable>
+                        {{ commentsfeed(comment,comment[3]) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
         </div>
                     <hr>
         {% endfor %}

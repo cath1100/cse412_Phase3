@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+        <form id="searchcommentform" method= "POST" action="{{ url_for('commentSearch') }}">
+        <div class="form-group">
+          <label for="title">Search Comment(must be exact match only):</label>
+          <input type="text" class="form-control" name="searchcomment" id="searchcomment">
+        </div>
+        <button type="submit" class="btn btn-primary"> Submit </button>
+      </form>
+
+{% endblock %}

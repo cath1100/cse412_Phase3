@@ -1,11 +1,9 @@
-{% macro commentsfeed(comments) %}
+{% macro commentsfeed(comments,id) %}
 
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <i class="fa-solid fa-comment fa-lg px-2"></i>
-    </button>
+
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal{{ id | string }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -13,17 +11,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            {% if comments != "" %}
-                {% for comment in comments[0] %}
-                    <label class="px-2">{{ comment[4] }}</label>
-                {% endfor %}
-                {% else %}
-                <label>No Comments</label>
-              {% endif %}
+            <form action="{{ url_for('uploadcomment') }}" method="post">
+                <label>Post comment</label>
+                <input hidden clas="form-control" name="photo_id" value="{{ id }}">
+                <input clas="form-control" name="commentuploadinput">
+                <button class="btn btn-dark" type="submit">Submit</button>
+            </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+{#            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>#}
+{#            <button type="button" class="btn btn-primary">Save changes</button>#}
           </div>
         </div>
       </div>

@@ -27,30 +27,37 @@ def hello():
 def home():
     if session.get('logged_in') == True:
         friendslist = get_friend_list(session.get('user_id'))
-        print(friendslist)
+
+        # print(friendslist)
         friendrecommendationlist = friendrecommendationsQuery(session.get('user_id'))
         feed = photofeed()
-
-        #comments = get_photo_comments(feed[4])
-        #print("Feed: "+ str(feed))
-        print(friendrecommendationlist)
-        #print(feed)
+        print(feed[0])
         commentfeed = []
-        #for photo in feed:
-        commentfeed.append(get_photo_comments(feed[1][4]))
-
+        friendlikes = []
+        friendlikesCount = []
         print(commentfeed)
+        for photo in feed:
+            commentfeed += get_photo_comments(photo[4])
+            friendlikesCount += get_photo_like_count(photo[4])
 
-        return render_template('Home.html', friendlist=friendslist,friendrecommendationlist=friendrecommendationlist, feed=feed, commentfeed=commentfeed)
+        return render_template('Home.html', friendlist=friendslist, friendrecommendationlist=friendrecommendationlist,
+                               feed=feed, commentfeed=commentfeed, friendlikes=friendlikes,
+                               friendlikesCount=friendlikesCount)
 
 
-
-@app.route('/AccountInfo')
+@app.route('/AccountInfo',methods=["POST","GET"])
 def displayInfo():
-    results = get_user_info(session.get('user_id'))
-    print(results)
+    albums = get_albums_for_user(session.get('user_id'))
+    if request.method == 'POST':
+        albumchoice = request.form['album_id']
 
-    return render_template('account.html',userid=session.get('user_id'),firstname=results[0][1],lastname=results[0][2],email=results[0][3],dateofbirth=results[0][5],hometown=results[0][4],gender=results[0][7])
+       # return render_template('account.html')
+        return redirect(url_for('albumview',albumchoice=albumchoice))
+    if request.method == "GET":
+        results = get_user_info(session.get('user_id'))
+        print(results)
+
+        return render_template('account.html',userid=session.get('user_id'),firstname=results[0][1],lastname=results[0][2],email=results[0][3],dateofbirth=results[0][5],hometown=results[0][4],gender=results[0][7],albums=albums)
     
 @app.route('/ChangeInfo', methods=['GET','POST'])
 def ChangeInfo():
@@ -129,7 +136,7 @@ def UserSearch():
 def Search():
     if request.method == 'POST':
         photoSearch = request.form['searchphoto']
-        return redirect(url_for('searchPhoto'))
+        return redirect(url_for('searchPhoto', tags = photoSearch))
     
     return render_template('searches/PhotoSearch.html')
 
@@ -144,13 +151,16 @@ def searchUser():
 
 @app.route('/SearchPhoto')
 def searchPhoto():
-    return render_template('searches/SearchPhotos.html')
+    tags = request.args['tags']
+    results = search_by_tag(tags)
+    print(results)
+    return render_template('searches/SearchPhotos.html', taglist = tags, results=results)
 
 @app.route('/TopUsers')
 def listUsers():
     results = user_contribution_score()
     print(results)
-    return render_template('topUsers.html', user1 =results[0], user2 = results[1], user3=results[2], user4=results[3], user5 =results[4])
+    return render_template('topUsers.html', results=results)
 
 
 @app.route('/postphoto',methods=["POST","GET"])
@@ -160,7 +170,7 @@ def postphoto():
         return render_template('postphoto.html', albums=albums)
     if request.method == "POST":
         caption = request.form['caption']
-        data = request.files['photodata'].filename
+        data = request.form['photodata']
         print(data)
        # databin = convertToBinaryData(data)
         album_id = request.form['album_id']
@@ -179,6 +189,50 @@ def addalbums():
     else:
         return redirect((url_for('postphoto')))
 
+@app.route('/updatelike',methods=['POST'])
+def updateLikes():
+    if request.method == "POST":
+        photo_id = request.values['photo_id']
+        add_like(photo_id,session.get('user_id'))
+        return redirect((url_for('home')))
+
+
+
+
+@app.route('/commentsearch', methods=["POST","GET"])
+def commentSearch():
+    if request.method == "POST":
+        comment = request.form['searchcomment']
+        return redirect(url_for('commentSearchResults', comment=comment))
+
+    return render_template('searches/searchcomment.html')
+
+@app.route('/commentsearchresults',methods=["GET"])
+def commentSearchResults():
+    if request.method == "GET":
+        text = request.args['comment']
+        results = search_comments(text)
+        print(results)
+        return render_template('searches/searchcommentresults.html', text=text, results=results)
+
+@app.route('/uploadcomment',methods=["POST"])
+def uploadcomment():
+    if request.method == "POST":
+        input = request.form['commentuploadinput']
+        photo_id = request.form['photo_id']
+        add_comment(photo_id,session.get('user_id'),input)
+        return redirect(url_for('home'))
+
+@app.route('/albumview')
+def albumview():
+    if request.method == "GET":
+        album_id = request.args['albumchoice']
+        print(album_id)
+        result = load_album(album_id)
+        photoresult = load_photo(album_id)
+        print(photoresult)
+        print(result)
+        return render_template('macros/albummacro.html', result=result, photoresult=photoresult)
 
 if __name__ == '__main__':
     app.debug = True

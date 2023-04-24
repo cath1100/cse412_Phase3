@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>Album: {{ result[0][1] }}</h3>
+    {% if photoresult != None%}
+        {% for photo in photoresult %}
+            <img src="{{ photo[2].decode() }}" style="height: 200px; width: 250px">
+        {% endfor %}
+        {% elif photoresult == '' or photoresult == [] %}
+        <label>Album is Empty</label>
+    {% endif %}
+{% endblock %}
