@@ -15,7 +15,6 @@
         </div>
         <div id="photofeed-bottom">
             <div class="row">
-            <label>{{ friendslikesCount }}</label>
             {% for likeCount in friendslikesCount %}
                 {% if likeCount[1] == photo[4] %}
 
@@ -28,12 +27,15 @@
             {% endfor %}
             </div>
             <h5>caption: {{ photo[3] }}</h5>
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{ photo[4] | string }}">
+                <i class="fa-solid fa-comment fa-lg px-2"></i>
+            </button>
             <div id="comments" class="vertical">
                 <h6>Comments:</h6>
                 {% for comment in commentfeed %}
                     {% if comment[0] == photo[4] %}
                         <lable>{{ comment[4] }}</lable>
-{#                        {{ commentsfeed(comment,comment[3]) }}#}
+                        {{ commentsfeed(comment,comment[3]) }}
                     {% endif %}
                 {% endfor %}
             </div>

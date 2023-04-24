@@ -49,6 +49,22 @@
         <p>Hometown: {{hometown}}</p>
         <p>Gender: {{gender}}</p>
         <button onclick="window.location.href = '/ChangeInfo';">CHANGE INFO</button>
+
+        <form id="albumpicker" action="{{ url_for('displayInfo') }}" method="post">
+            <label for="album_id">Your Albums</label>
+            <select class="form-select" aria-label="Default select example" name="album_id">
+                {% if albums != None %}
+                        {% for album in albums %}
+                            <option value="{{ album[0] }}">{{ album[1] }}</option>
+                        {% endfor %}
+                    {% else %}
+                            <li class="list-group-item">You have no Albums. Please create one in Post a Photo</li>
+                    {% endif %}
+
+            </select>
+            <button class="btn btn-dark" type="submit">Click to Go to Album</button>
+        </form>
+
         {% endblock %}
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

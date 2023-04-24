@@ -101,12 +101,14 @@ def upload_photo(caption, data, album_id):
 def load_album(album_id):
     global connection
     query = f'SELECT * FROM albums WHERE album_id = "{album_id}"'
-    results = execute_read_query(connection, query)
-    name = results[0][1]
-    user_id = str(results[0][2])
-    date_of_creation = results[0][3]
+    results1 = execute_read_query(connection, query)
+    name = results1[0][1]
+    user_id = str(results1[0][2])
+    date_of_creation = results1[0][3]
+    return results1
     query = f'SELECT * FROM photos WHERE album_id = "{album_id}"'
     results = execute_read_query(connection, query)
+    #return results
     for photo in results:
         photo_url = photo[2].decode()
         print(photo_url)
@@ -161,14 +163,14 @@ def get_user_info(user_id):
 # ===============================================================================
 def add_comment(photo_id, user_id, text):
     global connection
+    now = datetime.datetime.now()
     query = f'SELECT * FROM comments WHERE photo_id = "{photo_id}" AND user_id = "{user_id}"'
-    results = execute_read_query(connection, query)
+    results = execute_read_query(connection,query)
     if (results):
         print("user has already commented on this photo")
     else:
-        current_time = date.today().strftime("%m/%d/%y") + " " + datetime.now().strftime("%H:%M:%S")
         query = (f'INSERT INTO comments (photo_id, date_of_comment, user_id, text)'
-                 f'VALUES ("{photo_id}", "{current_time}", "{user_id}", "{text}")')
+                 f'VALUES ("{photo_id}", "{now.strftime("%Y-%m-%d %H:%M:%S")}", "{user_id}", "{text}")')
         execute_query(connection, query)
 
 
@@ -369,7 +371,21 @@ def search_by_tag(tags):
     #    list.append(photo[2])
     #print(list)
     return results
+#================================================================================
+def search_comments(text):
+    global connection
+    print(text)
+    query = f'SELECT c.text, c.photo_id, u.first_name, u.last_name, p.data FROM Comments c JOIN users u ON c.user_id=u.user_id JOIN photos p ON p.photo_id = c.photo_id WHERE c.text="{text}" AND c.photo_id=p.photo_id'
+    results = execute_read_query(connection,query)
+    print("Results for Comments: "+str(results))
+    return results
+#================================================================================
 
+def load_photo(album):
+    global connection
+    query = f'SELECT * FROM photos p WHERE p.album_id = "{album}"'
+    results = execute_read_query(connection, query)
+    return results
 #================================================================================
 def search_by_tag_user(tags, user_id):
     global connection
