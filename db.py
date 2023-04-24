@@ -95,6 +95,10 @@ def upload_photo(caption, data, album_id):
     query = (f'INSERT INTO photos (caption, data, album_id)'
              f'VALUES ("{caption}", "{data}", "{album_id}")')
     results = execute_query(connection, query)
+    query1 = f'SELECT * FROM photos ORDER BY photo_id DESC LIMIT 1'
+    resultsQ = execute_read_query(connection,query1)
+    print(resultsQ)
+    add_like(resultsQ[0][0],session.get('user_id'))
 
 
 # ===============================================================================
@@ -418,7 +422,27 @@ def top_tags():
     results = execute_read_query(connection, query)
     print(results)
     return results
+#================================================================================
+def addtagQuery(tagname, photo_id):
+    global connection
+    query = f'INSERT INTO tags (photo_id,text) VALUES ("{photo_id}","{tagname}")'
+    execute_query(connection, query)
 
+
+#================================================================================
+
+def get_photo_tags(photo_id):
+    global connection
+    query = f'SELECT * FROM tags WHERE photo_id="{photo_id}"'
+    results = execute_read_query(connection,query)
+
+    return results
+#================================================================================
+def get_latest_photo_id():
+    global connection
+    query = query1 = f'SELECT photo_id FROM photos ORDER BY photo_id DESC LIMIT 1'
+    result = execute_read_query(connection,query1)
+    return result
 #================================================================================
 def reccomended_photos(user_id):
     global connection

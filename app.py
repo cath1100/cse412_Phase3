@@ -27,22 +27,22 @@ def hello():
 def home():
     if session.get('logged_in') == True:
         friendslist = get_friend_list(session.get('user_id'))
-
-        # print(friendslist)
         friendrecommendationlist = friendrecommendationsQuery(session.get('user_id'))
         feed = photofeed()
         print(feed[0])
         commentfeed = []
         friendlikes = []
         friendlikesCount = []
+        tags = []
         print(commentfeed)
         for photo in feed:
             commentfeed += get_photo_comments(photo[4])
             friendlikesCount += get_photo_like_count(photo[4])
+            tags += get_photo_tags(photo[4])
 
         return render_template('Home.html', friendlist=friendslist, friendrecommendationlist=friendrecommendationlist,
                                feed=feed, commentfeed=commentfeed, friendlikes=friendlikes,
-                               friendlikesCount=friendlikesCount)
+                               friendlikesCount=friendlikesCount, tags=tags)
 
 
 @app.route('/AccountInfo',methods=["POST","GET"])
