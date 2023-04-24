@@ -264,6 +264,18 @@ def recs():
         results = reccomended_photos(user_id)
         return render_template('/recommendedPhotos.html', results=results)
 
+@app.route('/addtag', methods=["POST","GET"])
+def addtag():
+    if request.method == "GET":
+        return render_template('addtagstophotos.html')
+    if request.method == "POST":
+        tagname = request.form['tagname']
+        photo_id = request.form['photo_id']
+
+        addtagQuery(tagname,photo_id)
+       # addalbumQuery(albumname, session.get('user_id'))
+        return redirect(url_for('home'))
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
