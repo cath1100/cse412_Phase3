@@ -266,6 +266,7 @@ def recs():
 
 @app.route('/addtag', methods=["POST","GET"])
 def addtag():
+
     if request.method == "GET":
         return render_template('addtagstophotos.html')
     if request.method == "POST":
