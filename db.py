@@ -238,7 +238,9 @@ def get_friend_list(user_id):
     list = []
     for friend in results:
         list.append(get_user_info(str(friend[0]))[0][1])
+    print(list)
     return list
+   
 
 
 # ===============================================================================

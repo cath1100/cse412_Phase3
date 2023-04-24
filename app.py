@@ -157,7 +157,7 @@ def searchUser():
     print(friendID[0][0])
     userID = get_user_info(session.get('user_id'))
     print(userID[0][0])
-    results = add_friend(friendID[0][0],userID[0][0])
+    results = add_friend(userID[0][0], friendID[0][0])
     return render_template('searches/SearchUser.html', value=testEmail)
 
 @app.route('/SearchPhoto')
