@@ -401,7 +401,6 @@ def search_by_tag_user(tags, user_id):
                  AND a.user_id = "{user_id}"
                  GROUP BY p.photo_id
                  HAVING COUNT(*) = {tag_count} ''')
-    print(query)
     results = execute_read_query(connection, query)
     return results
 
@@ -420,4 +419,4 @@ connection = create_connection("localhost", "root", "password", "photoshare")
 # get_friend_list("1")
 # most_popular_tags()
 # get_albums_for_user("1")
-search_by_tag_user("music", "1")
+#search_by_tag_user("music", "1")
